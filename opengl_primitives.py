@@ -12,16 +12,16 @@ def startup():
 def shutdown():
     pass
 
-def draw_rectangle(x, y, size_a, size_b):
+def draw_rectangle(x, y, size_a, size_b, d = 0.0):
         glBegin(GL_TRIANGLES)
         glVertex2f(x, y)
-        glVertex2f(x + size_a, y)
-        glVertex2f(x, y + size_b)
+        glVertex2f(x + size_a + d, y)
+        glVertex2f(x, y + size_b + d)
         glEnd()
         glBegin(GL_TRIANGLES)
-        glVertex2f(x + size_a, y)
-        glVertex2f(x, y + size_b)
-        glVertex2f(x + size_a, y + size_b)
+        glVertex2f(x + size_a + d, y)
+        glVertex2f(x, y + size_b + d)
+        glVertex2f(x + size_a + d, y + size_b + d)
         glEnd()
 
 def render(time):
@@ -37,7 +37,7 @@ def render(time):
     glEnd()
 
     glColor3f(1, 0.6, 0)
-    draw_rectangle(-80.0, -80.0, 60.0, 40.0)
+    draw_rectangle(-80.0, -80.0, 60.0, 40.0, 5)
 
     glFlush()
 
