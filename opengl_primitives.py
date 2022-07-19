@@ -1,16 +1,23 @@
 import sys
+import random
 
 from glfw.GLFW import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+color_list = []
+
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-
+    set_random_color()
 
 def shutdown():
     pass
+
+def set_random_color():
+    for i in range(3):
+        color_list.append(random.random())
 
 def draw_rectangle(x, y, size_a, size_b, d = 0.0):
         glBegin(GL_TRIANGLES)
@@ -33,10 +40,10 @@ def render(time):
     glColor3f(0.9, 1.0, 0.2)
     glVertex2f(50.0, -25.0)
     glColor3f(0.5, 0.3, 1.0)
-    glVertex(0.0, 30.0)
+    glVertex(0.0, 70.0)
     glEnd()
 
-    glColor3f(1, 0.6, 0)
+    glColor3f(color_list[0], color_list[1], color_list[2])
     draw_rectangle(-80.0, -80.0, 60.0, 40.0, 5)
 
     glFlush()
