@@ -20,31 +20,60 @@ def set_random_color():
         color_list.append(random.random())
 
 def draw_rectangle(x, y, size_a, size_b, d = 0.0):
+        glColor3f(color_list[0], color_list[1], color_list[2])
         glBegin(GL_TRIANGLES)
         glVertex2f(x, y)
         glVertex2f(x + size_a + d, y)
         glVertex2f(x, y + size_b + d)
         glEnd()
+        glColor3f(color_list[0], color_list[1], color_list[2])
         glBegin(GL_TRIANGLES)
         glVertex2f(x + size_a + d, y)
         glVertex2f(x, y + size_b + d)
         glVertex2f(x + size_a + d, y + size_b + d)
         glEnd()
 
+def draw_white_rectangle(x, y, size_a, size_b, d = 0.0):
+    glColor3f(1.0, 1.0, 1.0)
+    glBegin(GL_TRIANGLES)
+    glVertex2f(x, y)
+    glVertex2f(x + size_a + d, y)
+    glVertex2f(x, y + size_b + d)
+    glEnd()
+    glColor3f(1.0, 1.0, 1.0)
+    glBegin(GL_TRIANGLES)
+    glVertex2f(x + size_a + d, y)
+    glVertex2f(x, y + size_b + d)
+    glVertex2f(x + size_a + d, y + size_b + d)
+    glEnd()
+
+def sierpinsky_carpet(x, y, size_a, size_b):
+    draw_rectangle(x, y, size_a, size_b)
+    draw_rectangle(x + size_a, y, size_a, size_b)
+    draw_rectangle(x + 2 * size_a, y, size_a, size_b)
+    draw_rectangle(x, y + size_b, size_a, size_b)
+    draw_white_rectangle(x + size_a, y + size_b, size_a, size_b)
+    draw_rectangle(x + 2 * size_a, y + size_b, size_a, size_b)
+    draw_rectangle(x, y + 2 * size_b, size_a, size_b)
+    draw_rectangle(x + size_a, y + 2 * size_b, size_a, size_b)
+    draw_rectangle(x + 2 * size_a, y + 2 * size_b, size_a, size_b)
+
 def render(time):
     glClear(GL_COLOR_BUFFER_BIT)
 
-    glBegin(GL_TRIANGLES)
-    glColor3f(1.0, 0.0, 0.2)
-    glVertex2f(-50.0, -25.0)
-    glColor3f(0.9, 1.0, 0.2)
-    glVertex2f(50.0, -25.0)
-    glColor3f(0.5, 0.3, 1.0)
-    glVertex(0.0, 70.0)
-    glEnd()
+    #glBegin(GL_TRIANGLES)
+    #glColor3f(1.0, 0.0, 0.2)
+    #glVertex2f(-50.0, -25.0)
+    #glColor3f(0.9, 1.0, 0.2)
+    #glVertex2f(50.0, -25.0)
+    #glColor3f(0.5, 0.3, 1.0)
+    #glVertex(0.0, 70.0)
+    #glEnd()
 
-    glColor3f(color_list[0], color_list[1], color_list[2])
-    draw_rectangle(-80.0, -80.0, 60.0, 40.0, 5)
+    #glColor3f(color_list[0], color_list[1], color_list[2])
+    #draw_rectangle(-80.0, -50.0, 10.0, 10.0)
+    
+    sierpinsky_carpet(-80.0, -80.0, 30.0, 20.0)
 
     glFlush()
 
