@@ -41,7 +41,7 @@ def axes():
 def make_3D_array(N):
     return numpy.zeros((N, N, 3))
 
-def fill_3D_array(N, array):
+def fill_3D_array(array, N):
     for i in range(N):
         for j in range(N):
             array[i][j][0] = calculate_x(u_array[i], v_array[j])
@@ -65,18 +65,30 @@ def calculate_y(u):
 def calculate_z(u, v):
     return (-90 * pow(u, 5) + 225 * pow(u, 4) - 270 * pow(u, 3) + 180 * pow(u, 2) - 45 * u) * math.sin(math.pi * v)
     
-def render(time, N, array):
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glLoadIdentity()
-    spin(time * 180 / 3.1415)
-    axes()
+def egg_with_points(array, N):
     glBegin(GL_POINTS)
     for i in range(N):
         for j in range(N):
             glVertex(array[i][j][0], array[i][j][1], array[i][j][2])
     glEnd()
-    glFlush()
 
+def egg_with_lines(array, N):
+    for i in range(N - 1):
+        for j in range(N - 1):
+            glBegin(GL_LINES)
+            glVertex(array[i][j][0], array[i][j][1], array[i][j][2])
+            glVertex(array[i + 1][j][0], array[i + 1][j][1], array[i + 1][j][2])
+            glVertex(array[i][j + 1][0], array[i][j + 1][1], array[i][j + 1][2])
+            glEnd()
+
+def render(time, array, N):
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+    spin(time * 180 / 3.1415)
+    axes()
+    #egg_with_points(array, N)
+    egg_with_lines(array, N)
+    glFlush()
 
 def update_viewport(window, width, height):
     if width == 0:
@@ -97,7 +109,6 @@ def update_viewport(window, width, height):
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-
 def main():
     if not glfwInit():
         sys.exit(-1)
@@ -105,7 +116,7 @@ def main():
     N = int(input("Enter legth of u and v arrays: "))
     fill_arrays(N)
     array = make_3D_array(N)
-    fill_3D_array(N, array)
+    fill_3D_array(array, N)
 
     window = glfwCreateWindow(400, 400, __file__, None, None)
     if not window:
@@ -118,13 +129,12 @@ def main():
 
     startup()
     while not glfwWindowShouldClose(window):
-        render(glfwGetTime(), N, array)
+        render(glfwGetTime(), array, N)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
 
     glfwTerminate()
-
 
 if __name__ == '__main__':
     main()
