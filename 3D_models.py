@@ -1,7 +1,5 @@
 import sys
-
 from glfw.GLFW import *
-
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
@@ -15,6 +13,10 @@ def startup():
 def shutdown():
     pass
 
+def spin(angle):
+    glRotatef(angle, 1.0, 0.0, 0.0)
+    glRotatef(angle, 0.0, 1.0, 0.0)
+    glRotatef(angle, 0.0, 0.0, 1.0)
 
 def axes():
     glBegin(GL_LINES)
@@ -33,13 +35,25 @@ def axes():
 
     glEnd()
 
+def make_array(N):
+    return [[0] * 3 for i in range(N) for j in range(N)]
+
+def fill_arrays(N):
+    step = 1/N
+    array = make_array(N)
+    start = 0
+    
+
+
+
+    
+
 
 def render(time):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
-
+    spin(time * 180 / 3.1415)
     axes()
-
     glFlush()
 
 
