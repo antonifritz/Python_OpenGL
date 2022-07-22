@@ -95,22 +95,32 @@ def egg_with_triangles(color_list, array, N):
             glBegin(GL_TRIANGLES)
             glColor(color_list[i][j][0], color_list[i][j][1], color_list[i][j][2])
             glVertex(array[i][j][0], array[i][j][1], array[i][j][2])
-
             glColor(color_list[i + 1][j][0], color_list[i + 1][j][1], color_list[i + 1][j][2])
             glVertex(array[i + 1][j][0], array[i + 1][j][1], array[i + 1][j][2])
-
             glColor(color_list[i][j + 1][0], color_list[i][j + 1][1], color_list[i][j + 1][2])
             glVertex(array[i][j + 1][0], array[i][j + 1][1], array[i][j + 1][2])
-
             glColor(color_list[i][j + 1][0], color_list[i][j + 1][1], color_list[i][j + 1][2])
             glVertex(array[i][j + 1][0], array[i][j + 1][1], array[i][j + 1][2])
-
             glColor(color_list[i + 1][j][0], color_list[i + 1][j][1], color_list[i + 1][j][2])
             glVertex(array[i + 1][j][0], array[i + 1][j][1], array[i + 1][j][2])
-
             glColor(color_list[i + 1][j + 1][0], color_list[i + 1][j + 1][1], color_list[i + 1][j + 1][2])
             glVertex(array[i + 1][j + 1][0], array[i + 1][j + 1][1], array[i + 1][j + 1][2])
             glEnd()
+
+def egg_with_triangle_strip(color_list, array, N):
+    glBegin(GL_TRIANGLE_STRIP)
+    for i in range(N - 1):
+        for j in range(N - 1):
+            glColor(color_list[i][j][0], color_list[i][j][1], color_list[i][j][2])
+            glVertex(array[i][j][0], array[i][j][1], array[i][j][2])
+            glColor(color_list[i][j + 1][0], color_list[i][j + 1][1], color_list[i][j + 1][2])
+            glVertex(array[i][j + 1][0], array[i][j + 1][1], array[i][j + 1][2])
+            glColor(color_list[i + 1][j][0], color_list[i + 1][j][1], color_list[i + 1][j][2])
+            glVertex(array[i + 1][j][0], array[i + 1][j][1], array[i + 1][j][2])
+            glColor(color_list[i + 1][j + 1][0], color_list[i + 1][j + 1][1], color_list[i + 1][j + 1][2])
+            glVertex(array[i + 1][j + 1][0], array[i + 1][j + 1][1], array[i + 1][j + 1][2])
+    glEnd()
+
 
 def render(time, color_list, array, N):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -119,7 +129,9 @@ def render(time, color_list, array, N):
     axes()
     #egg_with_points(array, N)
     #egg_with_lines(array, N)
-    egg_with_triangles(color_list, array, N)
+    #egg_with_triangles(color_list, array, N)
+    egg_with_triangle_strip(color_list, array, N)
+    
     glFlush()
 
 def update_viewport(window, width, height):
