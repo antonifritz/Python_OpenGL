@@ -1,4 +1,6 @@
 import sys
+import math
+import numpy
 from glfw.GLFW import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -10,7 +12,6 @@ def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.0, 0.0, 0.0, 1.0)
     glEnable(GL_DEPTH_TEST)
-
 
 def shutdown():
     pass
@@ -38,22 +39,42 @@ def axes():
     glEnd()
 
 def make_3D_array(N):
-    return [[0] * 3 for i in range(N) for j in range(N)]
+    return numpy.zeros((N, N, 3))
+
+def fill_3D_array(N, array):
+    for i in range(N):
+        for j in range(N):
+            array[i][j][0] = calculate_x(u_array[i], v_array[j])
+            array[i][j][1] = calculate_y(u_array[i])
+            array[i][j][2] = calculate_z(u_array[i], v_array[j])
 
 def fill_arrays(N):
     value = 0.0
-    step = 1/N
-    for i in range(N + 1):
+    step = 1/(N-1)
+    for i in range(N):
         u_array.append(value)
         v_array.append(value)
         value = round(value + step, 4)
 
+def calculate_x(u, v):
+    return (-90 * pow(u, 5) + 225 * pow(u, 4) - 270 * pow(u, 3) + 180 * pow(u, 2) - 45 * u) * math.cos(math.pi * v)
+
+def calculate_y(u):
+    return (160 * pow(u, 4) - 320 * pow(u, 3) + 160 * pow(u, 2) - 5)
+
+def calculate_z(u, v):
+    return (-90 * pow(u, 5) + 225 * pow(u, 4) - 270 * pow(u, 3) + 180 * pow(u, 2) - 45 * u) * math.sin(math.pi * v)
     
-def render(time):
+def render(time, N, array):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     spin(time * 180 / 3.1415)
     axes()
+    glBegin(GL_POINTS)
+    for i in range(N):
+        for j in range(N):
+            glVertex(array[i][j][0], array[i][j][1], array[i][j][2])
+    glEnd()
     glFlush()
 
 
@@ -81,6 +102,11 @@ def main():
     if not glfwInit():
         sys.exit(-1)
 
+    N = int(input("Enter legth of u and v arrays: "))
+    fill_arrays(N)
+    array = make_3D_array(N)
+    fill_3D_array(N, array)
+
     window = glfwCreateWindow(400, 400, __file__, None, None)
     if not window:
         glfwTerminate()
@@ -92,7 +118,7 @@ def main():
 
     startup()
     while not glfwWindowShouldClose(window):
-        render(glfwGetTime())
+        render(glfwGetTime(), N, array)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
@@ -101,6 +127,4 @@ def main():
 
 
 if __name__ == '__main__':
-    fill_arrays(10)
-    print(u_array)
     main()
