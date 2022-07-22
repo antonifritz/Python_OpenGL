@@ -76,21 +76,8 @@ def draw_white_rectangle(x, y, size_a, size_b, d = 0.0):
     glEnd()
 
 def render(time):
-    #glClear(GL_COLOR_BUFFER_BIT)
-    #glBegin(GL_TRIANGLES)
-    #glColor3f(1.0, 0.0, 0.2)
-    #glVertex2f(-50.0, -25.0)
-    #glColor3f(0.9, 1.0, 0.2)
-    #glVertex2f(50.0, -25.0)
-    #glColor3f(0.5, 0.3, 1.0)
-    #glVertex(0.0, 70.0)
-    #glEnd()
-
-    #glColor3f(color_list[0], color_list[1], color_list[2])
-    #draw_rectangle(-80.0, -80.0, 30.0, 20.0)
 
     sierpinski_carpet(-60, -60, 100, 100, 6)
-
     glFlush()
 
 
