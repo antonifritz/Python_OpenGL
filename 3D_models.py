@@ -3,6 +3,8 @@ from glfw.GLFW import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+u_array = []
+v_array = []
 
 def startup():
     update_viewport(None, 400, 400)
@@ -35,20 +37,18 @@ def axes():
 
     glEnd()
 
-def make_array(N):
+def make_3D_array(N):
     return [[0] * 3 for i in range(N) for j in range(N)]
 
 def fill_arrays(N):
+    value = 0.0
     step = 1/N
-    array = make_array(N)
-    start = 0
+    for i in range(N + 1):
+        u_array.append(value)
+        v_array.append(value)
+        value = round(value + step, 4)
+
     
-
-
-
-    
-
-
 def render(time):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
@@ -101,4 +101,6 @@ def main():
 
 
 if __name__ == '__main__':
+    fill_arrays(10)
+    print(u_array)
     main()
