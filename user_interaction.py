@@ -47,13 +47,17 @@ def axes():
 
     glEnd()
 
-def calculate_x_eye(R, theta, phi):
+def calculate_x_eye(R):
+    global theta
+    global phi
     return R * math.cos(math.radians(theta)) * math.cos(math.radians(phi))
 
-def calculate_y_eye(R, phi):
+def calculate_y_eye(R):
+    global theta
+    global phi
     return R * math.sin(math.radians(phi))
 
-def calculate_z_eye(R, theta, phi):
+def calculate_z_eye(R):
     return R * math.sin(math.radians(theta)) * math.cos(math.radians(phi))
 
 def example_object():
@@ -98,19 +102,19 @@ def render(time):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
-    viewer[0] = calculate_x_eye(scale, theta, phi)
-    viewer[1] = calculate_y_eye(scale, phi)
-    viewer[2] = calculate_z_eye(scale, theta, phi)
+    viewer[0] = calculate_x_eye(scale)
+    viewer[1] = calculate_y_eye(scale)
+    viewer[2] = calculate_z_eye(scale)
 
     gluLookAt(viewer[0], viewer[1], viewer[2],
               0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
 
     if left_mouse_button_pressed:
-        theta += delta_x * pix2angle
+        theta = theta +delta_x * pix2angle
         phi += delta_y * pix2angle
 
     if right_mouse_button_pressed:
-        scale += delta_x * 0.005
+        scale += delta_x * 0.01
 
     #glScalef(scale, scale, scale)
     #glRotatef(theta, 0.0, 1.0, 0.0)
