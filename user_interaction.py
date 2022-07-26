@@ -1,7 +1,6 @@
 import sys
-
+import math
 from glfw.GLFW import *
-
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
@@ -48,6 +47,14 @@ def axes():
 
     glEnd()
 
+def calculate_x_eye(R, theta, phi):
+    return R * math.cos(math.radians(theta)) * math.cos(math.radians(phi))
+
+def calculate_y_eye(R, phi):
+    return R * math.sin(math.radians(phi))
+
+def calculate_z_eye(R, theta, phi):
+    return R * math.sin(math.radians(theta)) * math.cos(math.radians(phi))
 
 def example_object():
     glColor3f(1.0, 1.0, 1.0)
@@ -83,7 +90,6 @@ def example_object():
     glRotatef(-90, 1.0, 0.0, 0.0)
     gluDeleteQuadric(quadric)
 
-
 def render(time):
     global theta
     global phi
@@ -91,6 +97,10 @@ def render(time):
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
+
+    viewer[0] = calculate_x_eye(scale, theta, phi)
+    viewer[1] = calculate_y_eye(scale, phi)
+    viewer[2] = calculate_z_eye(scale, theta, phi)
 
     gluLookAt(viewer[0], viewer[1], viewer[2],
               0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
@@ -102,9 +112,9 @@ def render(time):
     if right_mouse_button_pressed:
         scale += delta_x * 0.005
 
-    glScalef(scale, scale, scale)
-    glRotatef(theta, 0.0, 1.0, 0.0)
-    glRotatef(phi, 1.0, 0.0, 0.0)
+    #glScalef(scale, scale, scale)
+    #glRotatef(theta, 0.0, 1.0, 0.0)
+    #glRotatef(phi, 1.0, 0.0, 0.0)
 
 
     axes()
