@@ -5,7 +5,6 @@ from glfw.GLFW import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-
 viewer = [0.0, 0.0, 10.0]
 
 theta = 0.0
@@ -35,11 +34,11 @@ att_linear = 0.05
 att_quadratic = 0.001
 
 light_list = [light_ambient, light_diffuse, light_specular, light_position, light_ambient1, light_diffuse1, light_specular1, light_position1]
-
+print_list = ["light ambient", "light diffuse", "light specular", "light position", "light ambient 1",
+"light diffuse 1", "light specular 1", "light position 1"]
 chosen_light = 0
 chosen_light_component = 0
-chosen_value = 1
-
+chosen_coordinate = 0
 
 def startup():
     update_viewport(None, 400, 400)
@@ -119,28 +118,41 @@ def update_viewport(window, width, height):
 
 def keyboard_key_callback(window, key, scancode, action, mods):
     global chosen_light_component
-    global chosen_value
+    global chosen_coordinate
 
     if key == GLFW_KEY_ESCAPE and action == GLFW_PRESS:
         glfwSetWindowShouldClose(window, GLFW_TRUE)
-    elif key == GLFW_KEY_D and action == GLFW_PRESS and chosen_value < 3:
-        chosen_value += 1
-        print(chosen_value)
-    elif key == GLFW_KEY_A and action == GLFW_PRESS and chosen_value > 0:
-        chosen_value -= 1
-        print(chosen_value)
+
+    elif key == GLFW_KEY_D and action == GLFW_PRESS and chosen_coordinate < 3:
+        chosen_coordinate += 1
+        print("light component:", print_list[chosen_light_component], "\nchosen coordinate:", chosen_coordinate,
+        "\nvalue:", light_list[chosen_light_component][chosen_coordinate])
+
+    elif key == GLFW_KEY_A and action == GLFW_PRESS and chosen_coordinate > 0:
+        chosen_coordinate -= 1
+        print("light component:", print_list[chosen_light_component], "\nchosen coordinate:", chosen_coordinate,
+        "\nvalue:", light_list[chosen_light_component][chosen_coordinate])
+
     elif key == GLFW_KEY_W and action == GLFW_PRESS and chosen_light_component < 15:
         chosen_light_component += 1
-        print(chosen_light_component)
+        print("light component:", print_list[chosen_light_component], "\nchosen coordinate:", chosen_coordinate,
+        "\nvalue:", light_list[chosen_light_component][chosen_coordinate])
+
     elif key == GLFW_KEY_S and action == GLFW_PRESS and chosen_light_component > 0:
         chosen_light_component -= 1
-        print(chosen_light_component)
-    elif key == GLFW_KEY_UP and action == GLFW_PRESS and light_list[chosen_light_component][chosen_value] < 1:
-        light_list[chosen_light_component][chosen_value] = round(light_list[chosen_light_component][chosen_value] + 0.1, 4)
-        print(light_list[chosen_light_component][chosen_value])
-    elif key == GLFW_KEY_DOWN and action == GLFW_PRESS and light_list[chosen_light_component[chosen_value]] > 0:
-        light_list[chosen_light_component[chosen_value]] -= 0.1
+        print("light component:", print_list[chosen_light_component], "\nchosen coordinate:", chosen_coordinate,
+        "\nvalue:", light_list[chosen_light_component][chosen_coordinate])
 
+    elif key == GLFW_KEY_UP and action == GLFW_PRESS and light_list[chosen_light_component][chosen_coordinate] < 1:
+        light_list[chosen_light_component][chosen_coordinate] = round(light_list[chosen_light_component][chosen_coordinate] + 0.1, 4)
+        print("light component:", print_list[chosen_light_component], "\nchosen coordinate:", chosen_coordinate,
+        "\nvalue:", light_list[chosen_light_component][chosen_coordinate])
+        
+
+    elif key == GLFW_KEY_DOWN and action == GLFW_PRESS and light_list[chosen_light_component][chosen_coordinate] > 0:
+        light_list[chosen_light_component][chosen_coordinate] = round(light_list[chosen_light_component][chosen_coordinate] - 0.1, 4)
+        print("light component:", print_list[chosen_light_component], "\nchosen coordinate:", chosen_coordinate,
+        "\nvalue:", light_list[chosen_light_component][chosen_coordinate])
 
 
 
@@ -178,8 +190,9 @@ def main():
     glfwSetMouseButtonCallback(window, mouse_button_callback)
     glfwSwapInterval(1)
 
-    startup()
+    
     while not glfwWindowShouldClose(window):
+        startup()
         render(glfwGetTime())
         glfwSwapBuffers(window)
         glfwPollEvents()
